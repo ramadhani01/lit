@@ -221,24 +221,46 @@
             }
         }, 50);
 
-        // Durasi loading (contoh: 4 detik)
-        setTimeout(() => {
-            clearInterval(animationInterval);
-            
-            // Mengubah tampilan overlay menjadi pesan error perangkat tidak cocok
-            overlay.innerHTML = `
-                <div style="text-align:center; padding: 30px; background: white; width: 80%; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                    <img src="assets/p.png" style="width: 50px; margin-bottom: 15px; opacity: 0.7;">
-                    <h3 style="color: #333; margin-bottom: 10px; font-family: sans-serif;">Gagal Masuk</h3>
-                    <p style="color: #666; font-size: 14px; line-height: 1.5; font-family: sans-serif;">
-                        Maaf, perangkat Anda tidak memenuhi persyaratan minimum untuk menjalankan versi terbaru Litmatch.
-                    </p>
-                    <button onclick="window.location.reload()" style="margin-top: 20px; padding: 12px 25px; border-radius: 25px; border: none; background: #2d6cdf; color: white; font-weight: bold; cursor: pointer; width: 100%;">
-                        Mengerti
-                    </button>
-                </div>
-            `;
-        }, 4000); // 4000 = 4 detik
+                        // Durasi loading (contoh: 3 detik)
+setTimeout(() => {
+    clearInterval(animationInterval);
+    overlay.style.display = 'none'; // Sembunyikan loading
+
+    // Membuat elemen Toast Message
+    const toast = document.createElement('div');
+    toast.innerHTML = "Perangkat yang kamu masuki telah<br>diblokir, silakan masuk dengan<br>perangkat lain.";
+    
+    // Styling: Warna GELAP PEKAT, teks rata kiri, kotak ramping
+    Object.assign(toast.style, {
+        position: 'fixed',
+        bottom: '85px',            // Posisi di atas teks terms
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#222222', // WARNA GELAP SOLID (Tanpa Transparan)
+        color: 'white',
+        padding: '12px 20px',      
+        borderRadius: '25px',      // Sudut melengkung sesuai gambar
+        fontSize: '13px',          
+        textAlign: 'left',         // Teks rata samping/kiri
+        width: 'auto',             // Lebar mengikuti teks
+        minWidth: '210px',         // Kotak lebih kecil/ramping
+        zIndex: '10000',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', // Shadow lebih tegas
+        fontFamily: 'sans-serif',
+        lineHeight: '1.4'
+    });
+
+    document.body.appendChild(toast);
+
+    // Toast hilang otomatis setelah 4 detik
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.5s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 4000);
+
+}, 3000);
+  // 4000 = 4 detik
     }
 </script>
 
