@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litmatch - Make new friends</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            height: 100vh;
+            position: relative;
+            overflow: hidden; /* Mencegah scroll saat loading */
+        }
+
+        /* Pusat Bantuan pojok kanan atas */
+        .help {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .help-icon {
+            width: 25px;
+            height: 25px;
+        }
+
+        /* Wrapper full screen */
+        .page {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 360px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .top {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .logo-circle img {
+            width: 120px;
+            height: 120px;
+        }
+
+        h1 {
+            margin: 10px 0 5px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: #666;
+        }
+
+        .bottom {
+            margin-top: auto;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .btn-facebook {
+            width: 100%;
+            padding: 15px;
+            background: #2d6cdf;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-facebook img {
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            left: 20px;
+        }
+
+        .or {
+            margin: 20px 0;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+        }
+
+        .or::before, .or::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .or span {
+            margin: 0 10px;
+        }
+
+        .google img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.4;
+            margin-top: 20px;
+        }
+
+        .terms a {
+            color: #2d6cdf;
+            text-decoration: none;
+        }
+
+        /* --- PERBAIKAN OVERLAY LOADING --- */
+        #loading-overlay {
+            display: none; /* Sembunyi secara default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #loading-img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="help">
+    <span>Pusat Bantuan</span>
+    <img src="assets/p.png" alt="Help" class="help-icon">
+</div>
+
+<div class="page">
+    <div class="top">
+        <div class="logo-circle">
+            <img src="assets/logo.png" alt="Logo">
+        </div>
+        <h1>Litmatch</h1>
+        <div class="subtitle">Make new friends</div>
+    </div>
+
+    <div class="bottom">
+        <button class="btn-facebook" onclick="startLoading('fb')">
+            <img src="assets/fb.png" alt="FB">
+            <span>Facebook</span>
+        </button>
+
+        <div class="or">
+            <span>or</span>
+        </div>
+
+        <div class="google" onclick="startLoading('google')">
+            <img src="assets/g.png" alt="Google">
+        </div>
+
+        <div class="terms">
+            Melanjutkan pendaftaran berarti kamu telah<br>membaca dan mengakui
+            <a href="#">Ketentuan Penggunaan</a>,
+            <br><a href="#">Kebijakan Privasi</a>, dan
+            <a href="#">Kebijakan Cookies</a>.
+        </div>
+    </div>
+</div>
+
+<div id="loading-overlay">
+    <img id="loading-img" src="assets/loading_00000.png" alt="Loading">
+</div>
+
+<script>
+    // Inisialisasi array gambar loading
+    const frames = [];
+    for (let i = 0; i < 39; i++) {
+        let num = i.toString().padStart(5, '0');
+        frames.push(`assets/loading_${num}.png`);
+    }
+
+    function startLoading(type) {
+        const overlay = document.getElementById('loading-overlay');
+        const img = document.getElementById('loading-img');
+        
+        // Reset overlay ke tampilan awal jika sebelumnya sudah pernah klik
+        overlay.innerHTML = '<img id="loading-img" src="assets/loading_00000.png" alt="Loading">';
+        overlay.style.display = 'flex';
+
+        // Mulai animasi frame
+        let currentFrame = 0;
+        const animationInterval = setInterval(() => {
+            const currentImg = document.getElementById('loading-img');
+            if (currentImg) {
+                currentImg.src = frames[currentFrame];
+                currentFrame = (currentFrame + 1) % frames.length;
+            }
+        }, 50);
+
+        // Durasi loading (contoh: 4 detik)
+        setTimeout(() => {
+            clearInterval(animationInterval);
+            
+            // Mengubah tampilan overlay menjadi pesan error perangkat tidak cocok
+            overlay.innerHTML = `
+                <div style="text-align:center; padding: 30px; background: white; width: 80%; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <img src="assets/p.png" style="width: 50px; margin-bottom: 15px; opacity: 0.7;">
+                    <h3 style="color: #333; margin-bottom: 10px; font-family: sans-serif;">Gagal Masuk</h3>
+                    <p style="color: #666; font-size: 14px; line-height: 1.5; font-family: sans-serif;">
+                        Maaf, perangkat Anda tidak memenuhi persyaratan minimum untuk menjalankan versi terbaru Litmatch.
+                    </p>
+                    <button onclick="window.location.reload()" style="margin-top: 20px; padding: 12px 25px; border-radius: 25px; border: none; background: #2d6cdf; color: white; font-weight: bold; cursor: pointer; width: 100%;">
+                        Mengerti
+                    </button>
+                </div>
+            `;
+        }, 4000); // 4000 = 4 detik
+    }
+</script>
+
+
+</body>
+</html>
