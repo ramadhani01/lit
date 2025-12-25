@@ -205,13 +205,11 @@
 
     function startLoading(type) {
         const overlay = document.getElementById('loading-overlay');
-        const img = document.getElementById('loading-img');
         
-        // Reset overlay ke tampilan awal jika sebelumnya sudah pernah klik
+        // Reset overlay
         overlay.innerHTML = '<img id="loading-img" src="assets/loading_00000.png" alt="Loading">';
         overlay.style.display = 'flex';
 
-        // Mulai animasi frame
         let currentFrame = 0;
         const animationInterval = setInterval(() => {
             const currentImg = document.getElementById('loading-img');
@@ -221,49 +219,55 @@
             }
         }, 50);
 
-                        // Durasi loading (contoh: 3 detik)
-setTimeout(() => {
-    clearInterval(animationInterval);
-    overlay.style.display = 'none'; // Sembunyikan loading
+        // Loading selama 3 detik
+        setTimeout(() => {
+            clearInterval(animationInterval);
+            overlay.style.display = 'none'; // Sembunyikan loading
 
-    // Membuat elemen Toast Message
-    const toast = document.createElement('div');
-    toast.innerHTML = "Perangkat yang kamu masuki telah<br>diblokir, silakan masuk dengan<br>perangkat lain.";
-    
-    // Styling: Warna GELAP PEKAT, teks rata kiri, kotak ramping
-    Object.assign(toast.style, {
-        position: 'fixed',
-        bottom: '85px',            // Posisi di atas teks terms
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: '#333333', // WARNA GELAP SOLID (Tanpa Transparan)
-        color: 'white',
-        padding: '12px 20px',      
-        borderRadius: '25px',      // Sudut melengkung sesuai gambar
-        fontSize: '13px',          
-        textAlign: 'left',         // Teks rata samping/kiri
-        width: 'auto',             // Lebar mengikuti teks
-        minWidth: '210px',         // Kotak lebih kecil/ramping
-        zIndex: '10000',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.3)', // Shadow lebih tegas
-        fontFamily: 'sans-serif',
-        lineHeight: '1.4'
-    });
-
-    document.body.appendChild(toast);
-
-    // Toast hilang otomatis setelah 4 detik
-    setTimeout(() => {
-        toast.style.transition = 'opacity 0.5s';
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 500);
-    }, 4000);
-
-}, 3000);
-  // 4000 = 4 detik
+            // Panggil Toast Login Gagal
+            showToastError("Login gagal");
+        }, 3000);
     }
-</script>
 
+    function showToastError(message) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        
+        // Styling: Gelap pekat, sangat ramping, dan minimalis
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '100px',           // Sedikit lebih tinggi agar terlihat jelas
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: '#333333', // Hitam solid
+            color: 'white',
+            padding: '10px 24px',      
+            borderRadius: '9px',      
+            fontSize: '14px',          
+            fontWeight: '500',
+            textAlign: 'center',         
+            whiteSpace: 'nowrap',      // Memastikan teks satu baris saja
+            zIndex: '10000',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+            fontFamily: 'sans-serif',
+            opacity: '0',
+            transition: 'opacity 0.3s ease, transform 0.3s ease'
+        });
 
+        document.body.appendChild(toast);
+
+        // Animasi muncul (Fade in & sedikit naik)
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(-5px)';
+        }, 100);
+
+        // Hilang otomatis setelah 3 detik
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+            </script>
 </body>
 </html>
